@@ -32,23 +32,24 @@ const recommendedRules: Linter.RulesRecord = {
     "mobx/missing-observer": "warn"
 }
 
-const recommendedLegacyConfig: Linter.LegacyConfig = {
-    plugins: ["mobx"],
-    rules: recommendedRules
-}
-
-const recommendedFlatConfig: Linter.Config = {
-    name: "mobx/recommended",
-    plugins: { mobx: pluginMobx },
-    rules: recommendedRules
-}
-
-export default {
+const plugin: typeof pluginMobx & {
+    configs: { recommended: Linter.LegacyConfig }
+    flatConfigs: { recommended: Linter.Config }
+} = {
     ...pluginMobx,
     configs: {
-        recommended: recommendedLegacyConfig
+        recommended: {
+            plugins: ["mobx"],
+            rules: recommendedRules
+        }
     },
     flatConfigs: {
-        recommended: recommendedFlatConfig
+        recommended: {
+            name: "mobx/recommended",
+            plugins: { mobx: pluginMobx },
+            rules: recommendedRules
+        }
     }
 }
+
+export default plugin
